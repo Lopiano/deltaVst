@@ -21,8 +21,9 @@ DeltaAudioProcessor::DeltaAudioProcessor()
                       #endif
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
 #endif
+  gain (1.0f)
 {
 }
 
@@ -142,7 +143,9 @@ void DeltaAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& 
     // when they first compile a plugin, but obviously you don't need to keep
     // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
+    {
         buffer.clear (i, 0, buffer.getNumSamples());
+    }
 
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
@@ -154,7 +157,11 @@ void DeltaAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& 
     {
         auto* channelData = buffer.getWritePointer (channel);
 
-        // ..do something to the data...
+        for (int i = 0; i < buffer.getNumSamples(); ++i)
+        {
+            *channelData *= (-1.0f * gain) ;
+            channelData++;
+        }
     }
 }
 

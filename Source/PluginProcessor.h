@@ -54,8 +54,15 @@ public:
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+    
+    float getGain() {return gain;};
+    void setGain(float toSet) {gain = toSet;};
+    
 
 private:
+    
+    float gain;
+    //AudioParameterFloat gain;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DeltaAudioProcessor)
 };
